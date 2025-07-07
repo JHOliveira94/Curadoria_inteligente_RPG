@@ -1,0 +1,22 @@
+# Diretórios com dados grandes ou sensíveis
+data/
+logs/
+volumes/
+
+# Arquivos Python temporários
+__pycache__/
+*.pyc
+
+# Arquivos de ambiente
+.env
+*.env
+settings.json
+
+# Power BI
+*.pbix
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Editor
+.vscode/
