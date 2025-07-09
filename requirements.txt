@@ -1,0 +1,22 @@
+# Manipulação de mídia
+moviepy==1.*
+
+# Download de vídeos e metadados
+yt-dlp==2024.*
+
+# Banco de dados
+psycopg2-binary==2.*
+pymongo==4.*
+
+# Transcrição de fala (ASR)
+openai-whisper>=20230314,<20240000
+
+# Detecção de emoções em português
+feel-it==1.*
+
+# Modelos pré-treinados de NLP, áudio e texto
+transformers==4.*
+
+# Notebooks e kernel Jupyter
+jupyter==1.*
+ipykernel==6.*

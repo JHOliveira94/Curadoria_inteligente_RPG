@@ -1,0 +1,39 @@
+# Git e controle de versão
+.git/
+.gitignore
+
+# Dados e volumes pesados
+data/
+volumes/
+db/
+
+# Notebooks e arquivos auxiliares de desenvolvimento
+notebooks/
+*.ipynb
+
+# Dashboards
+dashboard/
+
+# Cache e arquivos temporários
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+*.sqlite3
+*.db
+*.wav
+*.mp4
+*.jsonl
+*.tmp
+
+# Configuração de IDEs e ambientes
+.vscode/
+.idea/
+.env
+.env.*
+
+# Outros arquivos grandes
+*.zip
+*.tar
+*.tar.gz
