@@ -9,6 +9,7 @@ Este arquivo executa as classes definidas em raw_downloader.py para efetuar o do
 # Conecta com raw_downloader.py
 
 from raw_downloader import RPGDownloader
+from raw_estrutura import criar_estrutura_pastas
 
 # ===== CONFIGURAÇÕES =====
 
@@ -24,6 +25,9 @@ def main():
     print("🎮 Curadoria Inteligente de RPG - Download Automático")
     print("="*60)
     
+    # Para criação de diretórios
+    criar_estrutura_pastas()
+
     # Criar instância do downloader
     rpg_downloader = RPGDownloader()
     
