@@ -3,12 +3,9 @@ from pathlib import Path
 def criar_estrutura_pastas() -> tuple:
     """
     Cria estrutura de pastas para o projeto.
-    
-    Args:
-        campanha (str): Nome da campanha
-    
+      
     Returns:
-        tuple: (pasta_videos, pasta_audio, pasta_metadata)
+        tupla: diretórios importantes para o projeto
     """
     dir_base = Path(__file__).parent.parent
     
@@ -25,7 +22,7 @@ def criar_estrutura_pastas() -> tuple:
     for pasta in [dir_dash, dir_config, dir_data, dir_db, dir_doc, dir_vol]:
         pasta.mkdir(parents=True, exist_ok=True)
     
-        print("\n✅ Estrutura criada com sucesso!")
+    print("\n✅ Estrutura criada com sucesso!")
 
 
     return dir_dash, dir_config, dir_data, dir_db, dir_doc, dir_vol
