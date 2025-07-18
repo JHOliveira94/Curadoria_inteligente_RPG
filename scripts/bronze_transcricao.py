@@ -1,5 +1,5 @@
 from pathlib import Path
-import whisper
+from faster_whisper import WhisperModel
 
 class Config:
 
@@ -61,7 +61,8 @@ class Transcrever:
         dict_audios_campanha = self.audios_por_campanha()
         
         # Carregar modelo Whisper
-        modelo = whisper.load_model(Config.modelo_transcricao)
+        from faster_whisper import WhisperModel
+        modelo = WhisperModel(Config.modelo_transcricao, device="cpu", compute_type="int8")
         
         # Pegar diretórios de destino (bronze)
         estrutura = EstruturaBronze()
@@ -78,12 +79,15 @@ class Transcrever:
             for arquivo_audio in lista_audios:
                 print(f"🎵 Transcrevendo: {arquivo_audio.name}")
                 
-                # Transcrever
-                resultado = modelo.transcribe(str(arquivo_audio), language=Config.idioma_transcricao)
+                # Transcrever com faster-whisper
+                segments, info = modelo.transcribe(str(arquivo_audio), language=Config.idioma_transcricao)
+                
+                # Converter segments em lista (faster-whisper retorna generator)
+                lista_segmentos = list(segments)
                 
                 # Extrair dados
-                texto_transcrito_completo = resultado["text"]
-                texto_transcrito_segmentado = resultado["segments"]
+                texto_transcrito_completo = " ".join([seg.text for seg in lista_segmentos])
+                texto_transcrito_segmentado = lista_segmentos
                 
                 # Nomes dos arquivos
                 nome_base = arquivo_audio.stem
@@ -97,12 +101,13 @@ class Transcrever:
                 # 2. Salvar segmentos
                 with open(caminho_segmentado, 'w', encoding='utf-8') as f:
                     for i, seg in enumerate(texto_transcrito_segmentado, 1):
-                        inicio = seg['start']
-                        fim = seg['end']
-                        texto = seg['text'].strip()
+                        inicio = seg.start     # Atributo, não dicionário
+                        fim = seg.end         # Atributo, não dicionário
+                        texto = seg.text.strip()  # Atributo, não dicionário
                         f.write(f"{i:03d}|{inicio:06.2f}|{fim:06.2f}|{texto}\n")
-                
+            
                 print(f"✅ Salvos: {nome_base}_completo.txt e {nome_base}_segmentado.txt")
+
 
 class RPGTranscricao:
     """Classe principal que coordena todo o processamento da camada Bronze"""

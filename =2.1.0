@@ -1,0 +1,8 @@
+Requirement already satisfied: torch in /usr/local/lib/python3.11/site-packages (1.13.1)
+Requirement already satisfied: typing-extensions in /usr/local/lib/python3.11/site-packages (from torch) (4.14.1)
+Requirement already satisfied: nvidia-cuda-runtime-cu11==11.7.99 in /usr/local/lib/python3.11/site-packages (from torch) (11.7.99)
+Requirement already satisfied: nvidia-cudnn-cu11==8.5.0.96 in /usr/local/lib/python3.11/site-packages (from torch) (8.5.0.96)
+Requirement already satisfied: nvidia-cublas-cu11==11.10.3.66 in /usr/local/lib/python3.11/site-packages (from torch) (11.10.3.66)
+Requirement already satisfied: nvidia-cuda-nvrtc-cu11==11.7.99 in /usr/local/lib/python3.11/site-packages (from torch) (11.7.99)
+Requirement already satisfied: setuptools in /usr/local/lib/python3.11/site-packages (from nvidia-cublas-cu11==11.10.3.66->torch) (65.5.1)
+Requirement already satisfied: wheel in /usr/local/lib/python3.11/site-packages (from nvidia-cublas-cu11==11.10.3.66->torch) (0.45.1)

@@ -1,7 +1,7 @@
-# Manipulação de mídia
-moviepy==1.*
+numpy==1.*
+torch == 2.6.*
 
-# Download de vídeos e metadados
+# Download de vídeos, áudios e metadados
 yt-dlp==2024.*
 
 # Banco de dados
@@ -9,7 +9,7 @@ psycopg2-binary==2.*
 pymongo==4.*
 
 # Transcrição de fala (ASR)
-openai-whisper>=20230314,<20240000
+faster-whisper>=1.0.0
 
 # Detecção de emoções em português
 feel-it==1.*

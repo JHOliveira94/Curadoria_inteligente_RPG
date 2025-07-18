@@ -40,7 +40,8 @@ class Config:
         "ordem paranormal": "ordem_paranormal",
         "critical role": "critical_role",
         "jambô": "jambo_editora",
-        "cellbit": "ordem_paranormal"
+        "cellbit": "ordem_paranormal",
+        "Fim dos Tempos": "fim_dos_tempos"
     }
     
     # Configurações de download usadas pelo YoutubeDL
