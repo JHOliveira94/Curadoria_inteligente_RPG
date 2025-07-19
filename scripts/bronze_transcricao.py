@@ -77,6 +77,18 @@ class Transcrever:
             
             # Para cada áudio da campanha:
             for arquivo_audio in lista_audios:
+                
+                
+                # Nomes dos arquivos
+                nome_base = arquivo_audio.stem
+                caminho_completo = pasta_destino / f"{nome_base}_completo.txt"
+                caminho_segmentado = pasta_destino / f"{nome_base}_segmentado.txt"
+                
+                # Verifica se arquivo já foi processado.
+                if caminho_completo.exists() and caminho_segmentado.exists():
+                    print(f"⏭️ Pulando {arquivo_audio.name} - já processado")
+                    continue
+
                 print(f"🎵 Transcrevendo: {arquivo_audio.name}")
                 
                 # Transcrever com faster-whisper
@@ -89,11 +101,10 @@ class Transcrever:
                 texto_transcrito_completo = " ".join([seg.text for seg in lista_segmentos])
                 texto_transcrito_segmentado = lista_segmentos
                 
-                # Nomes dos arquivos
-                nome_base = arquivo_audio.stem
-                caminho_completo = pasta_destino / f"{nome_base}_completo.txt"
-                caminho_segmentado = pasta_destino / f"{nome_base}_segmentado.txt"
                 
+                
+                print(f"🎵 Transcrevendo: {arquivo_audio.name}")
+
                 # 1. Salvar texto completo
                 with open(caminho_completo, 'w', encoding='utf-8') as f:
                     f.write(texto_transcrito_completo)

@@ -99,7 +99,19 @@ class Analisador:
                 # Processar cada linha (segmento)
                 linhas_analisadas = []
                 total_segmentos = len(linhas)
+
+                # Nome do arquivo de saída
+                nome_base = arquivo_transcricao.stem.replace("_segmentado", "")
+                caminho_analise = pasta_destino / f"{nome_base}_analise_sentimento.txt"
                 
+                # Verificar se já foi processado
+                if caminho_analise.exists():
+                    print(f"⏭️ Pulando {arquivo_transcricao.name} - já analisado")
+                    continue
+                
+                print(f"📝 Processando: {arquivo_transcricao.name}")
+
+
                 for i, linha in enumerate(linhas, 1):
                     # Mostrar progresso a cada 100 segmentos
                     if i % 100 == 0 or i == total_segmentos:
@@ -122,9 +134,7 @@ class Analisador:
                         nova_linha = f"{num}|{inicio}|{fim}|{emocao}|{texto}\n"
                         linhas_analisadas.append(nova_linha)
                 
-                # Nome do arquivo de saída
-                nome_base = arquivo_transcricao.stem.replace("_segmentado", "")
-                caminho_analise = pasta_destino / f"{nome_base}_analise_sentimento.txt"
+
                 
                 # Salvar arquivo com análises
                 with open(caminho_analise, 'w', encoding='utf-8') as f:
