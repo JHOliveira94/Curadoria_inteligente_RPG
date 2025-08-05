@@ -2,7 +2,7 @@
 PROJETO: CURADORIA DE SESSÕES DE RPG DE MESA
 
 Downloader - Classes e Funções
-Neste script estão as classes e funções para download e organização dos dados na camada raw.
+Neste script estão as classes e funções para download e organização dos dados base na camada raw.
 
 ===== RESULTADOS ESPERADOS =====
     Vídeo em formato .mp4
@@ -14,10 +14,10 @@ Neste script estão as classes e funções para download e organização dos dad
 # ===== IMPORTAÇÕES =====
 # Bibliotecas necessárias para a etapa raw do pipeline
 
-from yt_dlp import YoutubeDL # Downalod de vídeos, áudio e metadados
-from pathlib import Path # Organização dos repositórios
+from yt_dlp import YoutubeDL # Downalod de vídeo, áudio e metadados
+from pathlib import Path # Organização dos diretórios no sistema
 from datetime import datetime # Complementar metadados com datas
-import json # Para trabalhar com os metadados
+import json # Para trabalhar com os metadados'
 import re # Para padronizar textos
 
 
@@ -33,7 +33,7 @@ class Config:
     # Base da estrutura de pastas para a camada raw
     BASE_DIR = Path("data/raw")
     
-    # Campanhas conhecidas para identificação automática ao longo do script
+    # Dicionário de campanhas conhecidas para identificação automática ao longo do script
     CAMPANHAS_CONHECIDAS = {
         "fabula ultima": "fabula_ultima",
         "#fabulaultima": "fabula_ultima",
@@ -54,9 +54,9 @@ class Config:
 # ===== CLASSES OPERACIONAIS=====
 
 class CampanhaDetector:
-    """Classe responsável por detectar campanhas automaticamente
-        - Usa o dicionário CAMPANHAS_CONHECIDAS para determinar de que campanha é o vídeo.
-        - Usa a campanha para padronizar o salvamento e a busca de arquivos. 
+    """Classe responsável por detectar campanhas automaticamente ou solicitar seu nome quando necessário
+        - Usa o dicionário CAMPANHAS_CONHECIDAS para determinar de que campanha é o conteúdo baixado.
+        - Usa a campanha para padronizar o salvamento e a busca de arquivos.
     """
     
     def __init__(self):
@@ -91,9 +91,9 @@ class CampanhaDetector:
     
     def _perguntar_usuario(self) -> str:
         """Pergunta ao usuário qual a campanha do vídeo solicitado.
-            - Prima pela execução organizada do pipeline, 
+            - Foca na organização da execução do pipeline.
             - Garante que os arquivos sejam armazenados no diretório correto.
-            - Em caso de não detectar automáticamente, usuário informa a campanha
+            - Em caso de não detectar automáticamente, usuário informa a campanha.
         """
         print("\n🤔 Não consegui identificar a campanha automaticamente.")
         print("Campanhas disponíveis:")
@@ -132,7 +132,7 @@ class CampanhaDetector:
             print("❌ Opção inválida. Tente novamente.")
 
 class EpisodioManager:
-    """Classe responsável por gerenciar numeração de episódios
+    """Classe responsável por gerenciar numeração de episódios de uma mesma campanha.
         - Garante padronização e serialização dos arquivos.
         - Padrão: ep01, ep02, ...
         - Essencial para campanhas longas com várias sessões.
