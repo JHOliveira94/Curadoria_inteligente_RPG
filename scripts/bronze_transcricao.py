@@ -1,19 +1,50 @@
-from pathlib import Path
-from faster_whisper import WhisperModel
+"""
+PROJETO: CURADORIA DE SESSÕES DE RPG DE MESA
 
+Transcricao - Classes e Funções
+Neste script estão as classes e funções para transcrição dos aúdios e organização dos arquivos relacionados na camada bronze.
+
+===== RESULTADOS ESPERADOS =====
+    Transcrição em texto corrido em formato .txt
+    Transcrição segmentada em formato .txt
+"""
+
+# ===== IMPORTAÇÕES =====
+# Bibliotecas necessárias para a etapa bronze do pipeline
+
+from pathlib import Path # Organização dos diretórios no sistema
+from faster_whisper import WhisperModel # Modelo para transcrição dos arquivos de aúdio .wav
+
+
+# ===== CONFIGURAÇÕES GERAIS PARA O SCRIPT=====
 class Config:
+    """Configurações centralizadas do projeto.
+        - Facilita mudanças no projeto
+        - Facilita escalabilidade
+        - Facilita correções   
+    """
 
-    dir_raw = Path("data/raw")
-    base_dir_bronze = Path("data/bronze")
+    dir_raw = Path("data/raw") # Caminho dos arquivos para transcrição
+    base_dir_bronze = Path("data/bronze") # Caminho para novos arquivos gerados neste script
     
-    modelo_transcricao = "small"
-    idioma_transcricao = "pt"
+    modelo_transcricao = "small" # Modelo usado para transcrição. Opções: tiny, base, small, medium, large, large-v2, large-v3, distil-large-v2, distil-large-v3
+    idioma_transcricao = "pt" # Linguagem principal presente no áudio transcrito
     
 
+# ===== CLASSES OPERACIONAIS=====
 class EstruturaBronze:
-    
+    """
+    Cria estrutura de diretórios para essa etapa.
+    """
+
     def listar_campanhas(self) -> list:
-        
+        """
+        Busca as campanhas já trabalhadas na camada raw.
+
+        Returns:
+            list: Lista com os nomes das campanhas já trabalhadas.
+
+        """
         campanhas_trabalhadas = []
 
         for item in Config.dir_raw.iterdir():
@@ -23,6 +54,14 @@ class EstruturaBronze:
         return campanhas_trabalhadas
     
     def estruturar_diretorios(self) -> dict:
+        """
+        Estabelece os diretórios necessários para a camada bronze.
+
+        Returns:
+            dict: Dicionário cuja chave é o nome da campanha e o valor é o caminho do diretório para as transcrições.
+        """
+
+
         campanhas = self.listar_campanhas()
         dict_dir_transcricoes = {}
 
@@ -38,9 +77,18 @@ class EstruturaBronze:
 
 
 class Transcrever:
+    """
+    Gerenciamento do processo de transcrição.
+    """
 
     def audios_por_campanha(self) -> dict:
-    
+        """
+        Busca os áudios disponíveis por campanha para serem transcritos.
+
+        Returns:
+            dict: Dicionário cuja chave é o nome da campanha e o valor é uma lista com os arquivos de áudio encontrados.
+        """
+
         campanhas = EstruturaBronze().listar_campanhas()
         dict_audios_campanha = {}
         
@@ -58,6 +106,14 @@ class Transcrever:
         return dict_audios_campanha
     
     def transcrever_audios(self):
+        """
+        Transcreve áudios e salva em arquivos .txt.
+        
+        Gera dois arquivos por áudio:
+            {nome}_completo.txt: Texto corrido
+            {nome}_segmentado.txt: Com segmentado por timestamps
+        """
+
         dict_audios_campanha = self.audios_por_campanha()
         
         # Carregar modelo Whisper
