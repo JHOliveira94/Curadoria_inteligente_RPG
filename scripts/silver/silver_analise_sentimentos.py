@@ -1,19 +1,52 @@
+"""
+PROJETO: CURADORIA DE SESSÕES DE RPG DE MESA
+
+Analise de Sentimentos - Classes e Funções
+Neste script, estão as classes e funções para realização da análsie de sentimentos a partir das transcrições
+presentes na camada bronze.
+
+===== RESULTADOS ESPERADOS =====
+    Arquivo de texto .txt com estrutura: NUM|INICIO|FIM|EMOÇÃO|TEXTO
+"""
+
+# ===== IMPORTAÇÕES =====
+# Bibliotecas necessárias para a etapa silver do pipeline
+
 from pathlib import Path
-from feel_it import EmotionClassifier
-import torch
+from feel_it import EmotionClassifier # Modelo de NLP para detecção de emoções (joy, sadness, anger, fear) para análise de momentos marcantes
+import torch # Dependência necessária para execução do Feel-it. Framework de deep learning que fornece estruturas matemáticas para modelos de IA 
 
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 
+
+# ===== CONFIGURAÇÕES GERAIS PARA O SCRIPT=====
+
 class Config:
+    """
+    Configurações centralizadas do projeto.
+        - Facilita mudanças no projeto
+        - Facilita escalabilidade
+        - Facilita correções   
+    """
 
     dir_bronze = Path("data/bronze")
     base_dir_silver = Path("data/silver")
         
 
 class EstruturaSilver:
-    
+    """ 
+    Estrutura de diretórios para a camada silver 
+        - Dá continuidade ao trabalho executado na camada bronze
+        - Automatiza a organização dos dados de acordo com a necessidade da camada atual
+    """
     def listar_campanhas(self) -> list:
+        """
+        Detecta as campanhas já trabalhadas na camada bronze.
+
+        Returns:
+            list: Lista dos nomes das campanhas
+        """
         
         campanhas_trabalhadas = []
 
@@ -24,6 +57,13 @@ class EstruturaSilver:
         return campanhas_trabalhadas
     
     def estruturar_diretorios(self) -> dict:
+        """
+        Cria estrutura de diretórios para essa etapa do projeto.
+        
+        Returns:
+            dict: Dicionário em que a chave é o nome da campanha e o valor o caminho para o diretório. 
+        """
+
         campanhas = self.listar_campanhas()
         dict_dir_analise_sentimento = {}
 
@@ -38,31 +78,25 @@ class EstruturaSilver:
         return dict_dir_analise_sentimento
 
 class Analisador:
+    """
+    Classe responsável pela análise das trancições segmentadas dos epsódios.
+        - Automatiza a análise dos textos
+        - Categoriza trechos de acordo com o sentimento identificado
+        - Gera novo arquivo .txt em que há a emoção detectada ao lado da transcrição
+    """
 
     def __init__(self):
         # Carregar modelo feel-it
         
         self.classificador = EmotionClassifier()
-
+   
     def transcricao_por_campanha(self) -> dict:
-    
-        campanhas = EstruturaSilver().listar_campanhas()
-        dict_transcricoes_campanha = {}
-        
-        
-        for campanha in campanhas:
-            dir_transcricoes = Config.dir_bronze / campanha / "transcricoes"
-            lista_transcricoes = []
+        """
+        Agrupa por campanha todas as transcrições presentes na camada bronze.
 
-            for arquivo in dir_transcricoes.iterdir():
-                if arquivo.name.endswith("completo.txt"):
-                    lista_transcricoes.append(arquivo)
-            
-            dict_transcricoes_campanha[campanha] = lista_transcricoes
-        
-        return dict_transcricoes_campanha
-    
-    def transcricao_por_campanha(self) -> dict:
+        Returns:
+            dict: Dicionário em que a chave é o nome da campanha e o valor é uma lista dos arquivos de suas transcrições segmentadas.
+        """
         campanhas = EstruturaSilver().listar_campanhas()
         dict_analise_sentimento_campanha = {}
         
@@ -71,7 +105,7 @@ class Analisador:
             lista_analise_sentimento = []
 
             for arquivo in dir_transcricoes.iterdir():
-                if arquivo.name.endswith("_segmentado.txt"):  # ← Mudança aqui
+                if arquivo.name.endswith("_segmentado.txt"):
                     lista_analise_sentimento.append(arquivo)
             
             dict_analise_sentimento_campanha[campanha] = lista_analise_sentimento
@@ -79,6 +113,10 @@ class Analisador:
         return dict_analise_sentimento_campanha
 
     def analise_de_sentimento(self):
+        """
+        Execução da análise dos textos e categoriação segundo o modelo NLP feel-it.
+        Retorna arquivo .txt com a emoção associada à frase transcrita.
+        """
         dict_transcricoes_campanha = self.transcricao_por_campanha()
         dict_dir_analise_sentimento = EstruturaSilver().estruturar_diretorios()
 
@@ -127,7 +165,7 @@ class Analisador:
                         texto = partes[3]
                         
                         # Analisar sentimento
-                        resultado = self.classificador.predict([texto])
+                        resultado = self.classificador.predict([texto]) # Aplica 
                         emocao = resultado[0]
                         
                         # Criar nova linha: "001|000.00|003.45|joy|Texto"

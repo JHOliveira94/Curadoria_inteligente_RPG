@@ -1,3 +1,13 @@
+"""
+PROJETO: CURADORIA DE SESSÕES DE RPG DE MESA
+
+Estrutura- Classes e Funções
+Neste script estão as classes e funções para estruturar a organização geral para o projeto.
+
+"""
+
+# ===== IMPORTAÇÕES =====
+
 from pathlib import Path
      
 def criar_estrutura_pastas() -> tuple:
