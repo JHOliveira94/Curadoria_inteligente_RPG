@@ -3,7 +3,7 @@
 .gitignore
 
 # Dados e volumes pesados
-data/
+#data/
 volumes/
 db/
 
